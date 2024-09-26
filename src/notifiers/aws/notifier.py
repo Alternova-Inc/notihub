@@ -1,3 +1,11 @@
+"""
+
+AWS Notifier
+
+This module contains the AWS notifier class which is used to send notifications via AWS
+SNS or SES
+"""
+
 import json
 from dataclasses import dataclass
 from typing import Any, Dict, List, Type

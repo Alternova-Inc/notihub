@@ -1,3 +1,10 @@
+"""
+
+Base Notifier
+
+This module contains the base notifier class which is the boilerplate for all notifiers
+"""
+
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import List
