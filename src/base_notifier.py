@@ -14,7 +14,6 @@ class BaseNotifier(ABC):
     @abstractmethod
     def send_sms_notification(self, phone_number: str, message: str, **kwargs) -> str:
         """Sends a SMS notification to the given phone number"""
-        raise NotImplementedError
 
     @abstractmethod
     def send_email_notification(
@@ -30,9 +29,7 @@ class BaseNotifier(ABC):
         **kwargs,
     ) -> str:
         """Sends an email notification to the given email"""
-        raise NotImplementedError
 
     @abstractmethod
     def send_push_notification(self, message: str, **kwargs) -> str:
         """Sends a push notification to the given message"""
-        raise NotImplementedError
