@@ -10,6 +10,143 @@ package-mode = false
 python = "^3.10"
 boto3 = "^1.35.25"
 python-dotenv = "^1.0.1"
+pytest = "^8.3.3"
+pytest-cov = "^5.0.0"
+pre-commit = "^3.8.0"
+bandit = "^1.7.10"
+ruff = "^0.6.8"
+pylint = "^3.3.1"
+black = "^24.8.0"
+
+[tool.ruff]
+line-length = 90
+select = [
+    "F",    # pyflakes
+    "E",    # pycodestyle
+    "W",    # pycodestyle
+    "I",    # isort
+    "Q"     # flake8-quotes
+]
+fix = true
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+]
+
+[tool.ruff.flake8-quotes]
+docstring-quotes = "double"
+
+[tool.ruff.extend-per-file-ignores]
+"__init__.py" = ["ALL"]
+
+[tool.flake8]
+max-line-length = 90
+
+[tool.black]
+line-length = 90
+extend-exclude = '''(__init__.py)'''
+exclude = '''
+    /(
+        \.git
+      | \.hg
+      | \.mypy_cache
+      | \.nox
+      | \.tox
+      | \.venv
+      | _build
+      | buck-out
+      | build
+      | dist
+      | node_modules
+      | venv
+    )/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 90
+known_first_party = "src"
+sections = "FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
+
+[tool.pylint]
+disable = [
+    "import-outside-toplevel",
+    "unused-argument",
+    "duplicate-code",
+    "too-many-arguments",
+    "consider-using-f-string",
+    "too-many-instance-attributes",
+    "too-few-public-methods",
+]
+max-line-length = 90
+ignore-patterns = [
+    "LICENSE",
+    "test_.*?py",
+    "(.)*_test.py",
+    "(.)*.yml",
+    "(.)*.yaml",
+    "Dockerfile",
+    "(.)*.md",
+    "(.)*.txt",
+    "(.)*.ini",
+    "(.)*.toml",
+    "(.)*.lock"
+    ]
+ignore-paths = ["tests/*"]
+
+[tool.bandit]
+exclude_dirs = [".venv", "tests"]
+skips = ["B307"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src/."]
+addopts = [
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "--cov-report=xml",
+    "--cov-fail-under=85",
+    "--strict-markers",
+]
+asyncio_mode = "auto"
+
+[tool.coverage.run]
+branch = true
+source = ["src/."]
+omit = [
+    "*Test*",
+    "*/usr/local/lib*",
+    "*/tests/*",
+    "*/pytest/*",
+    "*/fixtures/*",
+]
+
+[tool.coverage.report]
+omit = [
+    "*Test*",
+    "*/usr/local/lib*",
+    "*/tests/*",
+    "*/pytest/*",
+    "*/fixtures/*",
+]
 
 
 [build-system]
