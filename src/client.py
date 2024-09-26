@@ -1,7 +1,13 @@
-import os
-from typing import Type
+"""
 
-from dotenv import load_dotenv
+Base client for notifiers
+
+This module contains the base client for notifiers it is used to access the notifiers
+via interface
+
+"""
+
+from typing import Type
 
 from notifiers.aws.notifier import AWSNotifier
 
@@ -23,21 +29,3 @@ class NotifierClient:
             aws_secret_access_key=aws_secret_access_key,
             region_name=region_name,
         )
-
-
-load_dotenv("../.env")
-aws_notifier = NotifierClient.get_aws_notifier(
-    aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"),
-    aws_secret_access_key=os.environ.get("AWS_SECRET_KEY"),
-    region_name="us-east-2",
-)
-
-
-print(
-    aws_notifier.send_email_notification(
-        email_data={"name": "John Doe"},
-        recipients=["juan.trujillo@alternova.com"],
-        sender="test.service@alternovastudio.com",
-        template="test",
-    )
-)
