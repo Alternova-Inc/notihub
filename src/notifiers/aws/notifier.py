@@ -49,6 +49,30 @@ class AWSNotifier(BaseNotifier):
             region_name=self.region_name,
         )
 
+    def get_topic(self, topic_arn: str) -> Dict[str, Any]:
+        """
+        Gets a topic with the given ARN
+
+        Args:
+            topic_arn (str): The ARN of the topic
+
+        Returns:
+            dict: Response of the client operation
+        """
+        return self.sns_client.get_topic_attributes(TopicArn=topic_arn)
+
+    def delete_topic(self, topic_arn: str) -> Dict[str, Any]:
+        """
+        Deletes a topic with the given ARN
+
+        Args:
+            topic_arn (str): The ARN of the topic
+
+        Returns:
+            dict: Response of the client operation
+        """
+        return self.sns_client.delete_topic(TopicArn=topic_arn)
+
     def create_topic(self, topic_name: str) -> Dict[str, Any]:
         """
         Creates a topic with the given name
@@ -88,7 +112,7 @@ class AWSNotifier(BaseNotifier):
         *,
         topic_arn: str,
         message: str,
-        subject: str = None,
+        subject: str,
         message_structure: str = None,
         **kwargs,
     ) -> Dict[str, Any]:
@@ -114,7 +138,7 @@ class AWSNotifier(BaseNotifier):
             TopicArn=topic_arn,
             Message=message,
             Subject=subject,
-            MessageStructure=message_structure,
+            MessageStructure=message_structure or "",
             **kwargs,
         )
 
@@ -265,8 +289,8 @@ class AWSNotifier(BaseNotifier):
             self.update_email_template(
                 template_name=template,
                 subject=subject,
-                text_body=template_data["TemplateContent"].get("Text"),
-                html_body=template_data["TemplateContent"].get("Html"),
+                text_body=template_data["Template"].get("TextPart"),
+                html_body=template_data["Template"].get("HtmlPart"),
             )
 
         return self.ses_client.send_templated_email(
@@ -280,6 +304,18 @@ class AWSNotifier(BaseNotifier):
             TemplateData=json.dumps(email_data),
         )
 
-    def send_push_notification(self, message: str, *args, **kwargs) -> str:
-        """Sends a push notification to the given message"""
-        raise NotImplementedError
+    def send_push_notification(self, device: str, message: str, **kwargs) -> str:
+        """
+        Sends a push notification to the given message
+
+        Args:
+            device (str): The device to send the message to
+            message (str): The message to send
+
+        Returns:
+            dict: Response of the client operation
+        """
+        return self.sns_client.publish(
+            TargetArn=device,
+            Message=message,
+        )
