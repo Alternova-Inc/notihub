@@ -38,5 +38,5 @@ class BaseNotifier(ABC):
         """Sends an email notification to the given email"""
 
     @abstractmethod
-    def send_push_notification(self, message: str, **kwargs) -> str:
+    def send_push_notification(self, device: str, message: str, **kwargs) -> str:
         """Sends a push notification to the given message"""
