@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "notipy"
-version = "0.1.0"
+version = "0.0.1a"
 description = ""
 authors = ["Juan Trujillo <juan.trujillo@alternova.com>"]
 readme = "README.md"
