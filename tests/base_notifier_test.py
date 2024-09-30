@@ -47,7 +47,7 @@ class TestBaseNotifierTests(TestCase):
         result = notifier.send_email_notification(
             subject="Test subject",
             email_data={"name": "John Doe"},
-            recipients=["juan.trujillo@alternova.com"],
+            recipients=["developer.testing72@gmail.com"],
             sender="test.service@alternovastudio.com",
             template="test",
         )
