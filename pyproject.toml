@@ -1,14 +1,14 @@
 [tool.poetry]
-name = "notipy"
-version = "0.0.1a"
-description = "Notipy is a Python library to manage and use different notification services."
+name = "notihub"
+version = "0.0.1"
+description = "Notihub is a Python library to manage and use different notification services."
 authors = ["Juan Trujillo <juan.trujillo@alternova.com>"]
 readme = "README.md"
-packages = [{include = "notipy"}]
+packages = [{include = "notihub"}]
 license = "MIT"
-homepage = "https://github.com/Alternova-Inc/notipy"
-repository = "https://github.com/Alternova-Inc/notipy"
-keywords = ["notifications", "aws", "sns", "ses"]
+homepage = "https://github.com/Alternova-Inc/notihub"
+repository = "https://github.com/Alternova-Inc/notihub"
+keywords = ["notifications", "aws"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -17,6 +17,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 
@@ -98,7 +99,7 @@ exclude = '''
 [tool.isort]
 profile = "black"
 line_length = 90
-known_first_party = "notipy/."
+known_first_party = "notihub/."
 sections = "FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
 
 [tool.pylint]
@@ -132,7 +133,7 @@ exclude_dirs = [".venv", "tests"]
 skips = ["B307"]
 
 [tool.pytest.ini_options]
-pythonpath = ["notipy"]
+pythonpath = ["notihub"]
 addopts = [
     "--cov-report=term-missing",
     "--cov-report=html",
@@ -144,7 +145,7 @@ asyncio_mode = "auto"
 
 [tool.coverage.run]
 branch = true
-source = ["notipy"]
+source = ["notihub"]
 omit = [
     "*Test*",
     "*/usr/local/lib*",

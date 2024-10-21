@@ -5,7 +5,7 @@ import boto3
 from botocore.exceptions import ClientError
 from dotenv import load_dotenv
 
-from notipy.notifiers.aws.notifier import AWSNotifier
+from notihub.notifiers.aws.notifier import AWSNotifier
 
 
 class TestAWSNotifier(TestCase):
@@ -19,7 +19,7 @@ class TestAWSNotifier(TestCase):
             aws_secret_access_key=os.environ.get("AWS_SECRET_KEY"),
             region_name="us-east-2",
         )
-        self.topic_name = "test-topic-notipy"
+        self.topic_name = "test-topic-notihub"
         self.sns_client = boto3.client(
             "sns",
             aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"),
@@ -114,7 +114,7 @@ class TestAWSNotifier(TestCase):
     def test_send_email_notification_with_subject_changes_template_subject(self):
         """Test send_email_notification"""
         self.aws_notifier.create_email_template(
-            template_name="test-notipy",
+            template_name="test-notihub",
             subject="Test subject",
             text_body="Test text body",
             html_body="Test html body",
@@ -123,13 +123,13 @@ class TestAWSNotifier(TestCase):
             email_data={"name": "John Doe"},
             recipients=["developer.testing72@gmail.com"],
             sender="test.service@alternovastudio.com",
-            template="test-notipy",
+            template="test-notihub",
             subject="New subject",
         )
         updated_template = self.aws_notifier.get_email_template(
-            template_name="test-notipy"
+            template_name="test-notihub"
         )
-        self.aws_notifier.delete_email_template(template_name="test-notipy")
+        self.aws_notifier.delete_email_template(template_name="test-notihub")
         self.assertEqual(updated_template["Template"]["SubjectPart"], "New subject")
 
     def test_send_push_notification_sends_push_notification(self):

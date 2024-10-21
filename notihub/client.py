@@ -9,7 +9,7 @@ via interface
 
 from typing import Type
 
-from notipy.notifiers.aws.notifier import AWSNotifier
+from notihub.notifiers.aws.notifier import AWSNotifier
 
 
 class NotifierClient:

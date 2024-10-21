@@ -3,8 +3,8 @@ from unittest import TestCase
 
 from dotenv import load_dotenv
 
-from notipy.client import NotifierClient
-from notipy.notifiers.aws.notifier import AWSNotifier
+from notihub.client import NotifierClient
+from notihub.notifiers.aws.notifier import AWSNotifier
 
 
 class TestNotifierClient(TestCase):

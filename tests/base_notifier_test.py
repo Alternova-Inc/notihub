@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from notipy.base_notifier import BaseNotifier
+from notihub.base_notifier import BaseNotifier
 
 
 class TestBaseNotifier(BaseNotifier):
