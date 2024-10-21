@@ -5,7 +5,7 @@ import boto3
 from botocore.exceptions import ClientError
 from dotenv import load_dotenv
 
-from notifiers.aws.notifier import AWSNotifier
+from notipy.notifiers.aws.notifier import AWSNotifier
 
 
 class TestAWSNotifier(TestCase):

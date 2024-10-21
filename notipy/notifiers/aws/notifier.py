@@ -12,7 +12,7 @@ from typing import Any, Dict, List, Type
 
 import boto3
 
-from base_notifier import BaseNotifier
+from notipy.base_notifier import BaseNotifier
 
 
 @dataclass

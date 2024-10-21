@@ -1,10 +1,24 @@
 [tool.poetry]
 name = "notipy"
 version = "0.0.1a"
-description = ""
+description = "Notipy is a Python library to manage and use different notification services."
 authors = ["Juan Trujillo <juan.trujillo@alternova.com>"]
 readme = "README.md"
-package-mode = false
+packages = [{include = "notipy"}]
+license = "MIT"
+homepage = "https://github.com/Alternova-Inc/notipy"
+repository = "https://github.com/Alternova-Inc/notipy"
+keywords = ["notifications", "aws", "sns", "ses"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -84,7 +98,7 @@ exclude = '''
 [tool.isort]
 profile = "black"
 line_length = 90
-known_first_party = "src"
+known_first_party = "notipy/."
 sections = "FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
 
 [tool.pylint]
@@ -118,7 +132,7 @@ exclude_dirs = [".venv", "tests"]
 skips = ["B307"]
 
 [tool.pytest.ini_options]
-pythonpath = ["src/."]
+pythonpath = ["notipy"]
 addopts = [
     "--cov-report=term-missing",
     "--cov-report=html",
@@ -130,7 +144,7 @@ asyncio_mode = "auto"
 
 [tool.coverage.run]
 branch = true
-source = ["src/."]
+source = ["notipy"]
 omit = [
     "*Test*",
     "*/usr/local/lib*",
