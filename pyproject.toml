@@ -1,0 +1,174 @@
+[tool.poetry]
+name = "notihub"
+version = "0.0.1pre"
+description = "Notihub is a Python library to manage and use different notification services."
+authors = ["Juan Trujillo <juan.trujillo@alternova.com>"]
+readme = "README.md"
+packages = [{include = "notihub"}]
+license = "MIT"
+homepage = "https://github.com/Alternova-Inc/notihub"
+repository = "https://github.com/Alternova-Inc/notihub"
+keywords = ["notifications", "aws"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+boto3 = "^1.35.25"
+
+[tool.poetry.extras]
+dev = [
+    "python-dotenv", 
+    "pytest", 
+    "pytest-cov", 
+    "pre-commit", 
+    "bandit", 
+    "ruff", 
+    "pylint", 
+    "black"
+]
+
+
+[tool.ruff]
+line-length = 90
+select = [
+    "F",    # pyflakes
+    "E",    # pycodestyle
+    "W",    # pycodestyle
+    "I",    # isort
+    "Q"     # flake8-quotes
+]
+fix = true
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+]
+
+[tool.ruff.flake8-quotes]
+docstring-quotes = "double"
+
+[tool.ruff.extend-per-file-ignores]
+"__init__.py" = ["ALL"]
+
+[tool.flake8]
+max-line-length = 90
+
+[tool.black]
+line-length = 90
+extend-exclude = '''(__init__.py)'''
+exclude = '''
+    /(
+        \.git
+      | \.hg
+      | \.mypy_cache
+      | \.nox
+      | \.tox
+      | \.venv
+      | _build
+      | buck-out
+      | build
+      | dist
+      | node_modules
+      | venv
+    )/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 90
+known_first_party = "notihub/."
+sections = "FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
+
+[tool.pylint]
+disable = [
+    "import-outside-toplevel",
+    "unused-argument",
+    "duplicate-code",
+    "too-many-arguments",
+    "consider-using-f-string",
+    "too-many-instance-attributes",
+    "too-few-public-methods",
+]
+max-line-length = 90
+ignore-patterns = [
+    "LICENSE",
+    "test_.*?py",
+    "(.)*_test.py",
+    "(.)*.yml",
+    "(.)*.yaml",
+    "Dockerfile",
+    "(.)*.md",
+    "(.)*.txt",
+    "(.)*.ini",
+    "(.)*.toml",
+    "(.)*.lock"
+    ]
+ignore-paths = ["tests/*"]
+
+[tool.bandit]
+exclude_dirs = [".venv", "tests"]
+skips = ["B307"]
+
+[tool.pytest.ini_options]
+pythonpath = ["notihub"]
+addopts = [
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "--cov-report=xml",
+    "--cov-fail-under=85",
+    "--strict-markers",
+]
+asyncio_mode = "auto"
+
+[tool.coverage.run]
+branch = true
+source = ["notihub"]
+omit = [
+    "*Test*",
+    "*/usr/local/lib*",
+    "*/tests/*",
+    "*/pytest/*",
+    "*/fixtures/*",
+]
+
+[tool.coverage.report]
+omit = [
+    "*Test*",
+    "*/usr/local/lib*",
+    "*/tests/*",
+    "*/pytest/*",
+    "*/fixtures/*",
+]
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

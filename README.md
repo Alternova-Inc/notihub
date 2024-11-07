@@ -1,2 +1,2 @@
-# notipy
-Alternova notipy library
+# notihub
+Alternova notihub library
