@@ -1,4 +1,5 @@
 import os
+import uuid
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
@@ -116,8 +117,9 @@ class TestAWSNotifier(TestCase):
 
     def test_send_email_notification_with_subject_changes_template_subject(self):
         """Test send_email_notification"""
+        random_template_name = f"test-notihub-{uuid.uuid4()}"
         self.aws_notifier.create_email_template(
-            template_name="test-notihub",
+            template_name=random_template_name,
             subject="Test subject",
             text_body="Test text body",
             html_body="Test html body",
@@ -132,7 +134,7 @@ class TestAWSNotifier(TestCase):
         updated_template = self.aws_notifier.get_email_template(
             template_name="test-notihub"
         )
-        self.aws_notifier.delete_email_template(template_name="test-notihub")
+        self.aws_notifier.delete_email_template(template_name=random_template_name)
         self.assertEqual(updated_template["Template"]["SubjectPart"], "New subject")
 
     def test_send_push_notification_sends_push_notification(self):
