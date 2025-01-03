@@ -34,8 +34,8 @@ class TestAWSNotifier(TestCase):
             region_name="us-east-2",
         )
 
-        self.platform_application_arn = os.environ.get("DEVICE_ARN")
-        self.endpoint_arn = os.environ.get("AWS_SECRET_KEY")
+        self.platform_application_arn = os.environ.get("PLATFORM_APPLICATION_ARN")
+        self.endpoint_arn = os.environ.get("DEVICE_ARN")
         self.custom_user_data = '{"user_data": "test_data"}'
 
     def tearDown(self) -> None:
@@ -211,7 +211,7 @@ class TestAWSNotifier(TestCase):
         response = self.aws_notifier.update_device_endpoint(
             self.endpoint_arn, self.custom_user_data
         )
-
+        print(response)
         self.assertEqual(response["ResponseMetadata"]["HTTPStatusCode"], 200)
 
     def test_create_device_endpoint_success(self):
