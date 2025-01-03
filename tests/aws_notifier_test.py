@@ -14,7 +14,7 @@ class TestAWSNotifier(TestCase):
 
     def setUp(self):
         """Set up"""
-        load_dotenv("../.env")
+        load_dotenv(".env")
         self.aws_notifier = AWSNotifier(
             aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"),
             aws_secret_access_key=os.environ.get("AWS_SECRET_KEY"),
@@ -34,7 +34,9 @@ class TestAWSNotifier(TestCase):
             region_name="us-east-2",
         )
 
-        self.plataform_application_arn = os.environ.get("PLATFORM_APPLICATION_ARN")
+        self.platform_application_arn = os.environ.get("PLATFORM_APPLICATION_ARN")
+        print(self.platform_application_arn)
+
     def tearDown(self) -> None:
         if getattr(self, "topic_arn", None):
             self.aws_notifier.delete_topic(self.topic_arn)
@@ -221,7 +223,7 @@ class TestAWSNotifier(TestCase):
         # Mock the boto3 client
         mock_boto_client.return_value = MagicMock()
         mock_boto_client.return_value.create_platform_endpoint.return_value = {
-            "EndpointArn": self.plataform_application_arn
+            "EndpointArn": self.platform_application_arn
         }
 
         device_token = "fake_device_token"

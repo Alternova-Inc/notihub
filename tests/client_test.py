@@ -12,7 +12,7 @@ class TestNotifierClient(TestCase):
 
     def setUp(self):
         """Set up"""
-        load_dotenv("../.env")
+        load_dotenv(".env")
 
     def test_get_aws_notifier_returns_aws_notifier(self):
         """Test get_aws_notifier"""
