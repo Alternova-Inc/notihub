@@ -1,7 +1,6 @@
 import os
 import uuid
 from unittest import TestCase
-from unittest.mock import MagicMock, patch
 
 import boto3
 from botocore.exceptions import ClientError
@@ -35,7 +34,9 @@ class TestAWSNotifier(TestCase):
             region_name="us-east-2",
         )
 
-        self.platform_application_arn = os.environ.get("PLATFORM_APPLICATION_ARN")
+        self.platform_application_arn = os.environ.get("DEVICE_ARN")
+        self.endpoint_arn = os.environ.get("AWS_SECRET_KEY")
+        self.custom_user_data = '{"user_data": "test_data"}'
 
     def tearDown(self) -> None:
         if getattr(self, "topic_arn", None):
@@ -204,44 +205,32 @@ class TestAWSNotifier(TestCase):
         )
         self.assertIsNotNone(response["ResponseMetadata"]["RequestId"])
 
-    def test_create_device_endpoint_exists(self):
-        """Test to verify the method exists in AWSNotifier"""
-        self.aws_notifier = AWSNotifier(
-            aws_access_key_id="fake_access_key",
-            aws_secret_access_key="fake_secret_key",
-            region_name="us-east-2",
+    def test_update_device_endpoint_success(self):
+        """Test updating the device endpoint successfully"""
+
+        response = self.aws_notifier.update_device_endpoint(
+            self.endpoint_arn, self.custom_user_data
         )
 
-        print("AWSNotifier methods:", dir(self.aws_notifier))
-        self.assertTrue(
-            hasattr(self.aws_notifier, "create_device_endpoint"),
-            "El método 'create_device_endpoint' no existe en AWSNotifier",
-        )
+        self.assertEqual(response["ResponseMetadata"]["HTTPStatusCode"], 200)
 
-    @patch("boto3.client")
-    def test_create_device_endpoint_success(self, mock_boto_client):
-        """Test create_device_endpoint with success"""
-        # Mock the boto3 client
-        mock_boto_client.return_value = MagicMock()
-        mock_boto_client.return_value.create_platform_endpoint.return_value = {
-            "EndpointArn": self.platform_application_arn
-        }
-
-        device_token = "fake_device_token"
-        custom_user_data = '{"user_id": "123"}'
+    def test_create_device_endpoint_success(self):
+        """Test create the device endpoint successfully"""
 
         response = self.aws_notifier.create_device_endpoint(
-            platform_application_arn=self.platform_application_arn,
-            device_token=device_token,
-            custom_user_data=custom_user_data,
+            self.platform_application_arn, "test_token"
         )
 
-        mock_boto_client.return_value.create_platform_endpoint.assert_called_once_with(
-            PlatformApplicationArn=self.platform_application_arn,
-            Token=device_token,
-            CustomUserData=custom_user_data,
+        self.assertIsNotNone(response["EndpointArn"])
+
+    def test_delete_device_endpoint_success(self):
+        """Test delete the device endpoint successfully"""
+
+        response = self.aws_notifier.create_device_endpoint(
+            self.platform_application_arn, "test_token"
         )
-        self.assertEqual(
-            response["EndpointArn"],
-            "arn:aws:sns:us-east-2:123456789012:endpoint/APNS/app/device",
-        )
+
+        arn = response["EndpointArn"]
+
+        response = self.aws_notifier.delete_device_endpoint(arn)
+        self.assertEqual(response["ResponseMetadata"]["HTTPStatusCode"], 200)
