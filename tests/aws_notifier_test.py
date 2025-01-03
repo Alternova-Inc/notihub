@@ -211,7 +211,7 @@ class TestAWSNotifier(TestCase):
         response = self.aws_notifier.update_device_endpoint(
             self.endpoint_arn, self.custom_user_data
         )
-        print(response)
+     
         self.assertEqual(response["ResponseMetadata"]["HTTPStatusCode"], 200)
 
     def test_create_device_endpoint_success(self):
