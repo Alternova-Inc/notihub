@@ -35,7 +35,6 @@ class TestAWSNotifier(TestCase):
         )
 
         self.platform_application_arn = os.environ.get("PLATFORM_APPLICATION_ARN")
-        print(self.platform_application_arn)
 
     def tearDown(self) -> None:
         if getattr(self, "topic_arn", None):
