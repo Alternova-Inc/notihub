@@ -1,5 +1,6 @@
 import os
 from unittest import TestCase
+from unittest.mock import MagicMock, patch
 
 import boto3
 from botocore.exceptions import ClientError
@@ -33,6 +34,7 @@ class TestAWSNotifier(TestCase):
             region_name="us-east-2",
         )
 
+        self.plataform_application_arn = os.environ.get("PLATFORM_APPLICATION_ARN")
     def tearDown(self) -> None:
         if getattr(self, "topic_arn", None):
             self.aws_notifier.delete_topic(self.topic_arn)
@@ -198,3 +200,45 @@ class TestAWSNotifier(TestCase):
             template_name=self.template_name
         )
         self.assertIsNotNone(response["ResponseMetadata"]["RequestId"])
+
+    def test_create_device_endpoint_exists(self):
+        """Test to verify the method exists in AWSNotifier"""
+        self.aws_notifier = AWSNotifier(
+            aws_access_key_id="fake_access_key",
+            aws_secret_access_key="fake_secret_key",
+            region_name="us-east-2",
+        )
+
+        print("AWSNotifier methods:", dir(self.aws_notifier))
+        self.assertTrue(
+            hasattr(self.aws_notifier, "create_device_endpoint"),
+            "El método 'create_device_endpoint' no existe en AWSNotifier",
+        )
+
+    @patch("boto3.client")
+    def test_create_device_endpoint_success(self, mock_boto_client):
+        """Test create_device_endpoint with success"""
+        # Mock the boto3 client
+        mock_boto_client.return_value = MagicMock()
+        mock_boto_client.return_value.create_platform_endpoint.return_value = {
+            "EndpointArn": self.plataform_application_arn
+        }
+
+        device_token = "fake_device_token"
+        custom_user_data = '{"user_id": "123"}'
+
+        response = self.aws_notifier.create_device_endpoint(
+            platform_application_arn=self.platform_application_arn,
+            device_token=device_token,
+            custom_user_data=custom_user_data,
+        )
+
+        mock_boto_client.return_value.create_platform_endpoint.assert_called_once_with(
+            PlatformApplicationArn=self.platform_application_arn,
+            Token=device_token,
+            CustomUserData=custom_user_data,
+        )
+        self.assertEqual(
+            response["EndpointArn"],
+            "arn:aws:sns:us-east-2:123456789012:endpoint/APNS/app/device",
+        )
