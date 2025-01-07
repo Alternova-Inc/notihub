@@ -320,7 +320,13 @@ class AWSNotifier(BaseNotifier):
             Message=message,
         )
 
-    def create_device_endpoint(self,platform_application_arn: str,device_token: str,custom_user_data: str = "",**kwargs):
+    def create_device_endpoint(
+        self,
+        platform_application_arn: str,
+        device_token: str,
+        custom_user_data: str = "",
+        **kwargs,
+    ):
         """
         Creates a platform endpoint for the given device token.
         Args:
