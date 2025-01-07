@@ -146,6 +146,15 @@ class TestAWSNotifier(TestCase):
         )
         self.assertIsNotNone(response["MessageId"])
 
+    def test_send_push_notification_sends_push_notification_with_title(self):
+            """Test send_push_notification"""
+            response = self.aws_notifier.send_push_notification(
+                device=os.environ.get("DEVICE_ARN"),
+                message="Test message",
+                title="Test Tittle"
+            )
+            self.assertIsNotNone(response["MessageId"])
+
     def test_create_email_template_creates_email_template(self):
         """Test create_email_template"""
         response = self.aws_notifier.create_email_template(
