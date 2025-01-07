@@ -1,4 +1,5 @@
 import os
+import uuid
 from unittest import TestCase
 
 import boto3
@@ -13,7 +14,7 @@ class TestAWSNotifier(TestCase):
 
     def setUp(self):
         """Set up"""
-        load_dotenv("../.env")
+        load_dotenv(".env")
         self.aws_notifier = AWSNotifier(
             aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"),
             aws_secret_access_key=os.environ.get("AWS_SECRET_KEY"),
@@ -32,6 +33,10 @@ class TestAWSNotifier(TestCase):
             aws_secret_access_key=os.environ.get("AWS_SECRET_KEY"),
             region_name="us-east-2",
         )
+
+        self.platform_application_arn = os.environ.get("PLATFORM_APPLICATION_ARN")
+        self.endpoint_arn = os.environ.get("DEVICE_ARN")
+        self.custom_user_data = '{"user_data": "test_data"}'
 
     def tearDown(self) -> None:
         if getattr(self, "topic_arn", None):
@@ -113,8 +118,9 @@ class TestAWSNotifier(TestCase):
 
     def test_send_email_notification_with_subject_changes_template_subject(self):
         """Test send_email_notification"""
+        random_template_name = f"test-notihub-{uuid.uuid4()}"
         self.aws_notifier.create_email_template(
-            template_name="test-notihub",
+            template_name=random_template_name,
             subject="Test subject",
             text_body="Test text body",
             html_body="Test html body",
@@ -129,7 +135,7 @@ class TestAWSNotifier(TestCase):
         updated_template = self.aws_notifier.get_email_template(
             template_name="test-notihub"
         )
-        self.aws_notifier.delete_email_template(template_name="test-notihub")
+        self.aws_notifier.delete_email_template(template_name=random_template_name)
         self.assertEqual(updated_template["Template"]["SubjectPart"], "New subject")
 
     def test_send_push_notification_sends_push_notification(self):
@@ -198,3 +204,33 @@ class TestAWSNotifier(TestCase):
             template_name=self.template_name
         )
         self.assertIsNotNone(response["ResponseMetadata"]["RequestId"])
+
+    def test_update_device_endpoint_success(self):
+        """Test updating the device endpoint successfully"""
+
+        response = self.aws_notifier.update_device_endpoint(
+            self.endpoint_arn, self.custom_user_data
+        )
+
+        self.assertEqual(response["ResponseMetadata"]["HTTPStatusCode"], 200)
+
+    def test_create_device_endpoint_success(self):
+        """Test create the device endpoint successfully"""
+
+        response = self.aws_notifier.create_device_endpoint(
+            self.platform_application_arn, "test_token"
+        )
+
+        self.assertIsNotNone(response["EndpointArn"])
+
+    def test_delete_device_endpoint_success(self):
+        """Test delete the device endpoint successfully"""
+
+        response = self.aws_notifier.create_device_endpoint(
+            self.platform_application_arn, "test_token"
+        )
+
+        arn = response["EndpointArn"]
+
+        response = self.aws_notifier.delete_device_endpoint(arn)
+        self.assertEqual(response["ResponseMetadata"]["HTTPStatusCode"], 200)

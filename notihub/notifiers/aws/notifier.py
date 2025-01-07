@@ -319,3 +319,72 @@ class AWSNotifier(BaseNotifier):
             TargetArn=device,
             Message=message,
         )
+
+    def create_device_endpoint(
+        self,
+        platform_application_arn: str,
+        device_token: str,
+        custom_user_data: str = "",
+        **kwargs,
+    ):
+        """
+        Creates a platform endpoint for the given device token.
+        Args:
+            platform_application_arn (str): The ARN of the platform application (e.g., APNS).
+            device_token (str): The token associated with the device to register.
+            custom_user_data (str, optional): The custom user data to associate with the device endpoint.
+                This should be a JSON-formatted string representing user-specific data, such as user ID,
+                subscription type, etc. If not provided, no custom user data is associated with the endpoint.
+                Defaults to "".
+        Returns:
+            dict: Response from the SNS client operation, which includes the platform endpoint details
+                or an error message if the operation fails.
+        """
+        try:
+
+            response = self.sns_client.create_platform_endpoint(
+                PlatformApplicationArn=platform_application_arn,
+                Token=device_token,
+                CustomUserData=custom_user_data,
+            )
+
+            return response
+        except Exception as e:
+            return {str(e)}
+
+    def delete_device_endpoint(self, endpoint_arn: str, **kwargs) -> dict:
+        """
+        Deletes the platform endpoint for the given endpoint ARN.
+        Args:
+            endpoint_arn (str): The ARN of the platform endpoint to delete.
+        Returns:
+            dict: Response from the SNS client operation, which includes the result of the delete operation
+                or an error message if the operation fails.
+        """
+        try:
+            response = self.sns_client.delete_endpoint(EndpointArn=endpoint_arn)
+            return response
+        except Exception as e:
+            return {str(e)}
+
+    def update_device_endpoint(
+        self, endpoint_arn: str, custom_user_data: str = "", **kwargs
+    ) -> dict:
+        """
+        Updates the CustomUserData for the given platform endpoint.
+        Args:
+            endpoint_arn (str): The ARN of the platform endpoint to update.
+            custom_user_data (str): The new custom user data to associate with the endpoint.
+                This should be a JSON-formatted string representing user-specific data.
+        Returns:
+            dict: Response from the SNS client operation, which includes the updated platform endpoint details
+                or an error message if the operation fails.
+        """
+        try:
+
+            response = self.sns_client.set_endpoint_attributes(
+                EndpointArn=endpoint_arn, Attributes={"CustomUserData": custom_user_data}
+            )
+            return response
+        except Exception as e:
+            return {str(e)}
