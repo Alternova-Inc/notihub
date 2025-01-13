@@ -143,17 +143,18 @@ class TestAWSNotifier(TestCase):
         response = self.aws_notifier.send_push_notification(
             device=os.environ.get("DEVICE_ARN"),
             message="Test message",
+            title="Test Tittle",
         )
         self.assertIsNotNone(response["MessageId"])
 
     def test_send_push_notification_sends_push_notification_with_title(self):
-            """Test send_push_notification"""
-            response = self.aws_notifier.send_push_notification(
-                device=os.environ.get("DEVICE_ARN"),
-                message="Test message",
-                title="Test Tittle"
-            )
-            self.assertIsNotNone(response["MessageId"])
+        """Test send_push_notification"""
+        response = self.aws_notifier.send_push_notification(
+            device=os.environ.get("DEVICE_ARN"),
+            message="Test message",
+            title="Test Tittle",
+        )
+        self.assertIsNotNone(response["MessageId"])
 
     def test_create_email_template_creates_email_template(self):
         """Test create_email_template"""
@@ -229,6 +230,7 @@ class TestAWSNotifier(TestCase):
         response = self.aws_notifier.create_device_endpoint(
             self.platform_application_arn, "test_token"
         )
+        print(response, "RESPONSE XD")
 
         self.assertIsNotNone(response["EndpointArn"])
 
