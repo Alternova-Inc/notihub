@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "notihub"
-version = "0.1.3pre"
+version = "0.1.4pre"
 description = "Notihub is a Python library to manage and use different notification services."
 authors = ["Juan Trujillo <juan.trujillo@alternova.com>"]
 readme = "README.md"
