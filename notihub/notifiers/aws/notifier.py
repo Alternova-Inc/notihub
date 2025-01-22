@@ -304,12 +304,11 @@ class AWSNotifier(BaseNotifier):
             TemplateData=json.dumps(email_data),
         )
 
-
     def send_push_notification(
         self,
         device: str,
         message: str,
-        title: str ,
+        title: str,
         payload: dict = None,
         **kwargs,
     ) -> str:
@@ -339,37 +338,6 @@ class AWSNotifier(BaseNotifier):
         )
     
 
-    def send_push_notification(
-        self,
-        device: str,
-        message: str,
-        title: str ,
-        payload: dict = None,
-        **kwargs,
-    ) -> str:
-        """
-        Sends a push notification with a title to the given message
-
-        Args:
-            device (str): The device to send the message to
-            title (str): The title of the push notification
-            message (str): The message to send
-            payload (dict, optional): Custom payload to send. If not provided, a default will be used.
-
-        Returns:
-            dict: Response of the client operation
-        """
-        if payload is None:
-            # Use default payload structure
-            payload = {
-                "default": message,
-                "APNS": json.dumps({"aps": {"alert": {"title": title, "body": message}}}),
-                "GCM": json.dumps({"notification": {"title": title, "body": message}}),
-            }
-
-        return self.sns_client.publish(
-            TargetArn=device, Message=json.dumps(payload), MessageStructure="json"
-        )
 
     def create_device_endpoint(
         self,
