@@ -330,6 +330,7 @@ class AWSNotifier(BaseNotifier):
             payload = {
                 "default": message,
                 "APNS": json.dumps({"aps": {"alert": {"title": title, "body": message}}}),
+                "APNS_SANDBOX":json.dumps({"aps": {"alert": {"title": title, "body": message}}}),
                 "GCM": json.dumps({"notification": {"title": title, "body": message}}),
             }
 
