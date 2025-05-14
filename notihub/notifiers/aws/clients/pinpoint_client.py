@@ -185,7 +185,7 @@ class PinpointClient:
         image_url: Optional[str],
         silent_push: bool,
         custom_data: Dict[str, Any],
-        ttl: Optional[int],
+        time_to_live: Optional[int],
         priority: Optional[str],
     ) -> Dict[str, Any]:
         payload_data = {**custom_data, "title": title, "body": body}
@@ -203,8 +203,8 @@ class PinpointClient:
         if priority:
             gcm_payload["priority"] = priority
 
-        if ttl is not None:
-            gcm_payload["time_to_live"] = ttl
+        if time_to_live is not None:
+            gcm_payload["time_to_live"] = time_to_live
 
         message = {
             "Action": action,
@@ -241,7 +241,7 @@ class PinpointClient:
         image_url: Optional[str] = None,
         custom_data: Optional[Dict[str, Any]] = None,
         silent_push: bool = False,
-        ttl: Optional[int] = None,
+        time_to_live: Optional[int] = None,
         priority: Optional[str] = None,
         **kwargs,
     ) -> Dict[str, Any]:
@@ -269,7 +269,7 @@ class PinpointClient:
             image_url=image_url,
             silent_push=silent_push,
             custom_data=processed_custom_data,
-            ttl=ttl,
+            time_to_live=time_to_live,
             priority=priority,
         )
         default_message = self._build_default_message(
