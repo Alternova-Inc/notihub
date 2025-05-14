@@ -1,14 +1,15 @@
-[tool.poetry]
+[project]
 name = "notihub"
-version = "0.1.4pre"
+version = "0.1.5pre"
 description = "Notihub is a Python library to manage and use different notification services."
-authors = ["Juan Trujillo <juan.trujillo@alternova.com>"]
+authors = [{ name = "Juan Trujillo", email = "juan.trujillo@alternova.com" }]
+requires-python = "~=3.8"
 readme = "README.md"
-packages = [{include = "notihub"}]
 license = "MIT"
-homepage = "https://github.com/Alternova-Inc/notihub"
-repository = "https://github.com/Alternova-Inc/notihub"
-keywords = ["notifications", "aws"]
+keywords = [
+    "notifications",
+    "aws",
+]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -20,23 +21,27 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
-
-[tool.poetry.dependencies]
-python = "^3.10"
-boto3 = "^1.35.25"
-
-[tool.poetry.extras]
-dev = [
-    "python-dotenv", 
-    "pytest", 
-    "pytest-cov", 
-    "pre-commit", 
-    "bandit", 
-    "ruff", 
-    "pylint", 
-    "black"
+dependencies = [
+    "boto3>=1.20.0,<2",
+    "dotenv>=0.9.9,<0.10",
 ]
 
+[project.optional-dependencies]
+dev = []
+
+[project.urls]
+Homepage = "https://github.com/Alternova-Inc/notihub"
+Repository = "https://github.com/Alternova-Inc/notihub"
+
+[tool.hatch.build.targets.sdist]
+include = ["notihub"]
+
+[tool.hatch.build.targets.wheel]
+include = ["notihub"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [tool.ruff]
 line-length = 90
@@ -167,8 +172,3 @@ omit = [
     "*/pytest/*",
     "*/fixtures/*",
 ]
-
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
