@@ -200,6 +200,22 @@ class PinpointClient(BaseAWSClient):
         Returns:
             The response from the Pinpoint get_endpoint operation.
         """
-        return self.pinpoint_client.get_endpoint(
-            ApplicationId=application_id, EndpointId=endpoint_id
-        )
+        try:
+            return self.pinpoint_client.get_endpoint(
+                ApplicationId=application_id, EndpointId=endpoint_id
+            )
+        except self.pinpoint_client.exceptions.NotFoundException as e:
+            return {"error": e.response["Error"]["Message"]}
+
+    def get_pinpoint_user_endpoints(
+        self, application_id: str, user_id: str
+    ) -> Dict[str, Any]:
+        """
+        Get all Pinpoint endpoints for a specific user.
+        """
+        try:
+            return self.pinpoint_client.get_user_endpoints(
+                ApplicationId=application_id, UserId=user_id
+            )
+        except self.pinpoint_client.exceptions.NotFoundException as e:
+            return {"error": e.response["Error"]["Message"]}
