@@ -56,7 +56,7 @@ class PinpointClient:
             "OptOut": "NONE",
         }
         if user_id:
-            endpoint_request["UserId"] = user_id
+            endpoint_request["User"] = user_id
 
         response = self.pinpoint_client.update_endpoint(
             ApplicationId=application_id,
@@ -73,6 +73,7 @@ class PinpointClient:
         device_token: Optional[str] = None,
         channel_type: Optional[str] = None,
         user_id: Optional[str] = None,
+        attributes: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
         """Updates specific attributes of an existing Pinpoint endpoint.
 
@@ -82,7 +83,7 @@ class PinpointClient:
             device_token: Optional new push notification token.
             channel_type: Optional channel type.
             user_id: Optional application's user ID.
-
+            attributes: Optional attributes to update.
         Returns:
             The response from the Pinpoint update_endpoint operation.
 
@@ -98,7 +99,10 @@ class PinpointClient:
             endpoint_request["ChannelType"] = channel_type.upper()
 
         if user_id:
-            endpoint_request["UserId"] = user_id
+            endpoint_request["User"] = user_id
+
+        if attributes:
+            endpoint_request["Attributes"] = attributes
 
         response = self.pinpoint_client.update_endpoint(
             ApplicationId=application_id,
@@ -304,6 +308,22 @@ class PinpointClient:
         Returns:
             The response from the Pinpoint get_endpoint operation.
         """
-        return self.pinpoint_client.get_endpoint(
-            ApplicationId=application_id, EndpointId=endpoint_id
-        )
+        try:
+            return self.pinpoint_client.get_endpoint(
+                ApplicationId=application_id, EndpointId=endpoint_id
+            )
+        except self.pinpoint_client.exceptions.NotFoundException as e:
+            return {"error": e.response["Error"]["Message"]}
+
+    def get_pinpoint_user_endpoints(
+        self, application_id: str, user_id: str
+    ) -> Dict[str, Any]:
+        """
+        Get all Pinpoint endpoints for a specific user.
+        """
+        try:
+            return self.pinpoint_client.get_user_endpoints(
+                ApplicationId=application_id, UserId=user_id
+            )
+        except self.pinpoint_client.exceptions.NotFoundException as e:
+            return {"error": e.response["Error"]["Message"]}
