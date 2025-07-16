@@ -1,11 +1,11 @@
 [project]
 name = "notihub"
-version = "0.1.6pre"
+version = "0.1.7pre"
 description = "Notihub is a Python library to manage and use different notification services."
 authors = [{ name = "Juan Trujillo", email = "juan.trujillo@alternova.com" }]
 requires-python = "~=3.8"
 readme = "README.md"
-license = "MIT"
+license = { file = "LICENSE" }
 keywords = [
     "notifications",
     "aws",
@@ -23,7 +23,11 @@ classifiers = [
 ]
 dependencies = [
     "boto3>=1.20.0,<2",
+    "coverage>=7.6.1",
     "dotenv>=0.9.9,<0.10",
+    "pytest-cov>=5.0.0",
+    "pytest-xdist>=3.6.1",
+    "python-decouple>=3.8",
 ]
 
 [project.optional-dependencies]
