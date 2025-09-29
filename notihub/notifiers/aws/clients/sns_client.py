@@ -96,8 +96,8 @@ class SNSClient(BaseAWSClient):
             subject (str): The subject of the message
             target_arn (str): The target ARN
             message_structure (str): The message structure
-            *args: Additional arguments
-            **kwargs: Additional keyword arguments
+            \*args: Additional arguments
+            \*\*kwargs: Additional keyword arguments
 
         Returns:
             dict: Response of the client operation
@@ -121,7 +121,7 @@ class SNSClient(BaseAWSClient):
             message (str): The message to send
 
         Additional arguments:
-            **kwargs: Additional keyword arguments
+            \*\*kwargs: Additional keyword arguments
 
         Returns:
             dict: Response of the client operation

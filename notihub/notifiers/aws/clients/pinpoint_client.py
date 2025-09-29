@@ -280,3 +280,39 @@ class PinpointClient(BaseAWSClient):
             EndpointId=endpoint_id,
         )
         return response
+
+    def create_pinpoint_endpoint(
+        self,
+        *,
+        application_id: str,
+        device_token: str,
+        channel_type: str,
+        user_id: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """Creates a new Pinpoint endpoint with a generated unique ID.
+        Args:
+            application_id: The Pinpoint Application ID.
+            device_token: The push notification token from APNS/FCM.
+            channel_type: Channel type (e.g., "GCM", "APNS", "APNS_SANDBOX").
+            user_id: The user ID of the application.
+        Returns:
+            Dict containing API response and the generated 'EndpointId'.
+            Store the 'EndpointId' for future updates/deletions.
+        Raises:
+            ClientError: If the Pinpoint API call fails.
+        """
+        generated_endpoint_id = str(uuid.uuid4())
+        endpoint_request: Dict[str, Any] = {
+            "Address": device_token,
+            "ChannelType": channel_type.upper(),
+            "OptOut": "NONE",
+        }
+        if user_id:
+            endpoint_request["UserId"] = user_id
+
+        response = self.pinpoint_client.update_endpoint(
+            ApplicationId=application_id,
+            EndpointId=generated_endpoint_id,
+            EndpointRequest=endpoint_request,
+        )
+        return {"EndpointId": generated_endpoint_id, **response}

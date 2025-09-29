@@ -133,8 +133,8 @@ class SESClient(BaseAWSClient):
             subject (str): The subject of the email (not required if template is provided)
             cc_emails (List[str]): The CC emails of the email
             bcc_emails (List[str]): The BCC emails of the email
-            *args: Additional arguments
-            **kwargs: Additional keyword arguments
+            \*args: Additional arguments
+            \*\*kwargs: Additional keyword arguments
 
         Returns:
             dict: Response of the client operation

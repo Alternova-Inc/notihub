@@ -11,6 +11,12 @@ class BaseAWSClient(ABC):
     region_name: str = None
 
     def initialize_client(self, service_name: str = None):
+        """
+        Initialize the AWS client
+        
+        Args:
+            service_name (str): The name of the service
+        """
         self.validate_credentials()
         kwargs = {}
         if self.aws_access_key_id and self.aws_secret_access_key and self.region_name:
@@ -21,6 +27,9 @@ class BaseAWSClient(ABC):
         return boto3.client(service_name, **kwargs)
 
     def validate_credentials(self):
+        """
+        Validate AWS credentials are provided
+        """
         required_credentials = list(
             filter(None, [self.aws_access_key_id, self.aws_secret_access_key, self.region_name])
         )
