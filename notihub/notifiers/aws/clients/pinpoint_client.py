@@ -1,3 +1,4 @@
+import uuid
 import json
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
@@ -183,3 +184,99 @@ class PinpointClient(BaseAWSClient):
             responses.append(response)
 
         return responses
+
+    def create_pinpoint_endpoint(
+        self,
+        *,
+        application_id: str,
+        device_token: str,
+        channel_type: str,
+        user_id: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """Creates a new Pinpoint endpoint with a generated unique ID.
+        Args:
+            application_id: The Pinpoint Application ID.
+            device_token: The push notification token from APNS/FCM.
+            channel_type: Channel type (e.g., "GCM", "APNS", "APNS_SANDBOX").
+            user_id: The user ID of the application.
+        Returns:
+            Dict containing API response and the generated 'EndpointId'.
+            Store the 'EndpointId' for future updates/deletions.
+        Raises:
+            ClientError: If the Pinpoint API call fails.
+        """
+        generated_endpoint_id = str(uuid.uuid4())
+        endpoint_request: Dict[str, Any] = {
+            "Address": device_token,
+            "ChannelType": channel_type.upper(),
+            "OptOut": "NONE",
+        }
+        if user_id:
+            endpoint_request["UserId"] = user_id
+
+        response = self.pinpoint_client.update_endpoint(
+            ApplicationId=application_id,
+            EndpointId=generated_endpoint_id,
+            EndpointRequest=endpoint_request,
+        )
+        return {"EndpointId": generated_endpoint_id, **response}
+
+    def update_pinpoint_endpoint(
+        self,
+        *,
+        application_id: str,
+        endpoint_id: str,
+        device_token: Optional[str] = None,
+        channel_type: Optional[str] = None,
+        user_id: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """Updates specific attributes of an existing Pinpoint endpoint.
+        Args:
+            application_id: The Pinpoint Application ID.
+            endpoint_id: The unique ID of the endpoint to update.
+            device_token: Optional new push notification token.
+            channel_type: Optional channel type.
+            user_id: Optional application's user ID.
+        Returns:
+            The response from the Pinpoint update_endpoint operation.
+        Raises:
+            ClientError: If the Pinpoint API call fails.
+        """
+        endpoint_request: Dict[str, Any] = {}
+
+        if device_token:
+            endpoint_request["Address"] = device_token
+
+        if channel_type:
+            endpoint_request["ChannelType"] = channel_type.upper()
+
+        if user_id:
+            endpoint_request["UserId"] = user_id
+
+        response = self.pinpoint_client.update_endpoint(
+            ApplicationId=application_id,
+            EndpointId=endpoint_id,
+            EndpointRequest=endpoint_request,
+        )
+        return response
+
+    def delete_pinpoint_endpoint(
+        self,
+        *,
+        application_id: str,
+        endpoint_id: str,
+    ) -> Dict[str, Any]:
+        """Deletes a specific Pinpoint endpoint.
+        Args:
+            application_id: The Pinpoint Application ID.
+            endpoint_id: The unique identifier of the endpoint to delete.
+        Returns:
+            The response from the Pinpoint delete_endpoint operation.
+        Raises:
+            ClientError: If the Pinpoint API call fails.
+        """
+        response = self.pinpoint_client.delete_endpoint(
+            ApplicationId=application_id,
+            EndpointId=endpoint_id,
+        )
+        return response
