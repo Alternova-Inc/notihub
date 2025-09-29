@@ -10,6 +10,7 @@ via interface
 from typing import Type, Optional
 
 from notihub.notifiers.aws.notifier import AWSNotifier
+from notihub.notifiers.twilio.notifier import TwilioNotifier
 
 
 class NotifierClient:
@@ -35,4 +36,19 @@ class NotifierClient:
             aws_access_key_id=aws_access_key_id,
             aws_secret_access_key=aws_secret_access_key,
             region_name=region_name,
+        )
+
+    @staticmethod
+    def get_twilio_notifier(
+        account_sid: Optional[str] = None,
+        auth_token: Optional[str] = None,
+        twilio_phone_number: Optional[str] = None,
+    ) -> Type[TwilioNotifier]:
+        """
+        Returns a Twilio notifier client.
+        """
+        return TwilioNotifier(
+            account_sid=account_sid,
+            auth_token=auth_token,
+            twilio_phone_number=twilio_phone_number,
         )

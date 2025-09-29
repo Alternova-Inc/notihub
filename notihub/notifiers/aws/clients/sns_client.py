@@ -192,16 +192,13 @@ class SNSClient(BaseAWSClient):
                 which includes the platform endpoint details
                 or an error message if the operation fails.
         """
-        try:
-            response = self.sns_client.create_platform_endpoint(
-                PlatformApplicationArn=platform_application_arn,
-                Token=device_token,
-                CustomUserData=custom_user_data,
-            )
+        response = self.sns_client.create_platform_endpoint(
+            PlatformApplicationArn=platform_application_arn,
+            Token=device_token,
+            CustomUserData=custom_user_data,
+        )
 
-            return response
-        except Exception as e:
-            return {str(e)}
+        return response
 
     def delete_device_endpoint(self, endpoint_arn: str, **kwargs) -> dict:
         """
@@ -212,11 +209,8 @@ class SNSClient(BaseAWSClient):
             dict: Response from the SNS client operation, which includes the result of
             the delete operation or an error message if the operation fails.
         """
-        try:
-            response = self.sns_client.delete_endpoint(EndpointArn=endpoint_arn)
-            return response
-        except Exception as e:
-            return {str(e)}
+        response = self.sns_client.delete_endpoint(EndpointArn=endpoint_arn)
+        return response
 
     def update_device_endpoint(
         self, endpoint_arn: str, custom_user_data: str = "", **kwargs
@@ -232,10 +226,7 @@ class SNSClient(BaseAWSClient):
             dict: Response from the SNS client operation, which includes the
             updated platform endpoint details or an error message if the operation fails.
         """
-        try:
-            response = self.sns_client.set_endpoint_attributes(
-                EndpointArn=endpoint_arn, Attributes={"CustomUserData": custom_user_data}
-            )
-            return response
-        except Exception as e:
-            return {str(e)}
+        response = self.sns_client.set_endpoint_attributes(
+            EndpointArn=endpoint_arn, Attributes={"CustomUserData": custom_user_data}
+        )
+        return response
