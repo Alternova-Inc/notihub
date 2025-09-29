@@ -49,9 +49,6 @@ class TestAWSNotifier(TestCase):
         self.assertIsNotNone(self.aws_notifier.sns_client)
         self.assertIsNotNone(self.aws_notifier.ses_client)
 
-    def test_create_client_returns_boto3_client(self):
-        """Test create_client"""
-        self.assertIsNotNone(self.aws_notifier.create_client("sns"))
 
     def test_create_topic_creates_topic(self):
         """Test create_topic"""

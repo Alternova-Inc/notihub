@@ -22,3 +22,8 @@ class TestNotifierClient(TestCase):
             region_name="us-east-2",
         )
         self.assertIsInstance(aws_notifier, AWSNotifier)
+
+    def test_get_aws_client_without_credentials_returns_aws_notifier(self):
+        """Test get_aws_notifier"""
+        aws_notifier = NotifierClient.get_aws_notifier()
+        self.assertIsInstance(aws_notifier, AWSNotifier)

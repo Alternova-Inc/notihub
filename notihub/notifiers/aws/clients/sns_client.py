@@ -2,28 +2,20 @@ import json
 from dataclasses import dataclass
 from typing import Any, Dict, Union
 
-import boto3
+from notihub.notifiers.aws.clients.base_aws_client import BaseAWSClient
+
 
 
 @dataclass
-class SNSClient:
+class SNSClient(BaseAWSClient):
     """
     SNSClient
 
     Class used to generate notifications via AWS SNS
     """
 
-    aws_access_key_id: str
-    aws_secret_access_key: str
-    region_name: str
-
     def __post_init__(self):
-        self.sns_client = boto3.client(
-            "sns",
-            aws_access_key_id=self.aws_access_key_id,
-            aws_secret_access_key=self.aws_secret_access_key,
-            region_name=self.region_name,
-        )
+        self.sns_client = self.initialize_client("sns")
 
     def get_topic(self, topic_arn: str) -> Dict[str, Any]:
         """

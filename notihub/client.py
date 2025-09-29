@@ -7,7 +7,7 @@ via interface
 
 """
 
-from typing import Type
+from typing import Type, Optional
 
 from notihub.notifiers.aws.notifier import AWSNotifier
 
@@ -21,9 +21,16 @@ class NotifierClient:
 
     @staticmethod
     def get_aws_notifier(
-        aws_access_key_id: str, aws_secret_access_key: str, region_name: str
+        aws_access_key_id: Optional[str] = None,
+        aws_secret_access_key: Optional[str] = None,
+        region_name: Optional[str] = None
     ) -> Type[AWSNotifier]:
-        """Returns an AWS notifier client"""
+        """
+        Returns an AWS notifier client
+        
+        If no credentials are provided, the default ones will be used
+        using boto3 default config handling
+        """
         return AWSNotifier(
             aws_access_key_id=aws_access_key_id,
             aws_secret_access_key=aws_secret_access_key,
