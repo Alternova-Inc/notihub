@@ -23,9 +23,9 @@ class AWSNotifier(SNSClient, SESClient, PinpointClient, BaseNotifier):
     class inheritance to initialize the clients.
     """
 
-    aws_access_key_id: str
-    aws_secret_access_key: str
-    region_name: str
+    aws_access_key_id: str = None
+    aws_secret_access_key: str = None
+    region_name: str = None
 
     def __post_init__(self):
         """

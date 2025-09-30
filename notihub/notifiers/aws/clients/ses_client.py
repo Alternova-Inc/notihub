@@ -1,29 +1,23 @@
 import json
 from dataclasses import dataclass
-from typing import Any, Dict, List
+from typing import Any, Dict, List, ClassVar
 
-import boto3
+from notihub.notifiers.aws.clients.base_aws_client import BaseAWSClient
 
 
 @dataclass
-class SESClient:
+class SESClient(BaseAWSClient):
     """
     SESClient
 
     Class used to generate notifications via AWS SES
     """
-
     aws_access_key_id: str
     aws_secret_access_key: str
     region_name: str
 
     def __post_init__(self):
-        self.ses_client = boto3.client(
-            "ses",
-            aws_access_key_id=self.aws_access_key_id,
-            aws_secret_access_key=self.aws_secret_access_key,
-            region_name=self.region_name,
-        )
+        self.ses_client = self.initialize_client("ses")
 
     def create_email_template(
         self, template_name: str, subject: str, text_body: str, html_body: str
@@ -139,8 +133,8 @@ class SESClient:
             subject (str): The subject of the email (not required if template is provided)
             cc_emails (List[str]): The CC emails of the email
             bcc_emails (List[str]): The BCC emails of the email
-            *args: Additional arguments
-            **kwargs: Additional keyword arguments
+            \*args: Additional arguments
+            \*\*kwargs: Additional keyword arguments
 
         Returns:
             dict: Response of the client operation

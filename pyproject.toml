@@ -3,7 +3,7 @@ name = "notihub"
 version = "0.1.7pre"
 description = "Notihub is a Python library to manage and use different notification services."
 authors = [{ name = "Juan Trujillo", email = "juan.trujillo@alternova.com" }]
-requires-python = "~=3.8"
+requires-python = ">=3.8"
 readme = "README.md"
 license = { file = "LICENSE" }
 keywords = [
@@ -28,6 +28,7 @@ dependencies = [
     "pytest-cov>=5.0.0",
     "pytest-xdist>=3.6.1",
     "python-decouple>=3.8",
+    "pytest>=8.3.5",
 ]
 
 [project.optional-dependencies]

@@ -2,28 +2,20 @@ import json
 from dataclasses import dataclass
 from typing import Any, Dict, Union
 
-import boto3
+from notihub.notifiers.aws.clients.base_aws_client import BaseAWSClient
+
 
 
 @dataclass
-class SNSClient:
+class SNSClient(BaseAWSClient):
     """
     SNSClient
 
     Class used to generate notifications via AWS SNS
     """
 
-    aws_access_key_id: str
-    aws_secret_access_key: str
-    region_name: str
-
     def __post_init__(self):
-        self.sns_client = boto3.client(
-            "sns",
-            aws_access_key_id=self.aws_access_key_id,
-            aws_secret_access_key=self.aws_secret_access_key,
-            region_name=self.region_name,
-        )
+        self.sns_client = self.initialize_client("sns")
 
     def get_topic(self, topic_arn: str) -> Dict[str, Any]:
         """
@@ -104,8 +96,8 @@ class SNSClient:
             subject (str): The subject of the message
             target_arn (str): The target ARN
             message_structure (str): The message structure
-            *args: Additional arguments
-            **kwargs: Additional keyword arguments
+            \*args: Additional arguments
+            \*\*kwargs: Additional keyword arguments
 
         Returns:
             dict: Response of the client operation
@@ -129,7 +121,7 @@ class SNSClient:
             message (str): The message to send
 
         Additional arguments:
-            **kwargs: Additional keyword arguments
+            \*\*kwargs: Additional keyword arguments
 
         Returns:
             dict: Response of the client operation
@@ -200,16 +192,13 @@ class SNSClient:
                 which includes the platform endpoint details
                 or an error message if the operation fails.
         """
-        try:
-            response = self.sns_client.create_platform_endpoint(
-                PlatformApplicationArn=platform_application_arn,
-                Token=device_token,
-                CustomUserData=custom_user_data,
-            )
+        response = self.sns_client.create_platform_endpoint(
+            PlatformApplicationArn=platform_application_arn,
+            Token=device_token,
+            CustomUserData=custom_user_data,
+        )
 
-            return response
-        except Exception as e:
-            return {str(e)}
+        return response
 
     def delete_device_endpoint(self, endpoint_arn: str, **kwargs) -> dict:
         """
@@ -220,11 +209,8 @@ class SNSClient:
             dict: Response from the SNS client operation, which includes the result of
             the delete operation or an error message if the operation fails.
         """
-        try:
-            response = self.sns_client.delete_endpoint(EndpointArn=endpoint_arn)
-            return response
-        except Exception as e:
-            return {str(e)}
+        response = self.sns_client.delete_endpoint(EndpointArn=endpoint_arn)
+        return response
 
     def update_device_endpoint(
         self, endpoint_arn: str, custom_user_data: str = "", **kwargs
@@ -240,10 +226,7 @@ class SNSClient:
             dict: Response from the SNS client operation, which includes the
             updated platform endpoint details or an error message if the operation fails.
         """
-        try:
-            response = self.sns_client.set_endpoint_attributes(
-                EndpointArn=endpoint_arn, Attributes={"CustomUserData": custom_user_data}
-            )
-            return response
-        except Exception as e:
-            return {str(e)}
+        response = self.sns_client.set_endpoint_attributes(
+            EndpointArn=endpoint_arn, Attributes={"CustomUserData": custom_user_data}
+        )
+        return response
