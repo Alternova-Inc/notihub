@@ -1,6 +1,6 @@
 [project]
 name = "notihub"
-version = "0.1.7pre"
+version = "0.1.8pre"
 description = "Notihub is a Python library to manage and use different notification services."
 authors = [{ name = "Juan Trujillo", email = "juan.trujillo@alternova.com" }]
 requires-python = ">=3.8"
